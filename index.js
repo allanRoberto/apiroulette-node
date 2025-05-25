@@ -44,7 +44,7 @@ try {
 
 // Inicialização da aplicação Express
 const app = express();
-const port =  8080;
+const port =  3090;
 
 // Configuração de CORS para permitir requisições de diferentes origens
 app.use(cors({
@@ -54,7 +54,7 @@ app.use(cors({
 
 // Configuração da sessão para autenticação
 app.use(session({
-    secret: '',
+    secret: 'd0ltdqp5pdvs738mjqng',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false } // Para desenvolvimento (use true em produção com HTTPS)
