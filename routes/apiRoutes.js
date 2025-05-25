@@ -2,6 +2,10 @@ import { Router } from 'express';
 import axios from 'axios';
 const router = Router();
 
+
+router.get('/', () => {
+    res.status(200).json({message : "ok"})
+})
 // Rota de autenticação para login de usuários
 router.post('/auth/login', async (req, res) => {
     try {
