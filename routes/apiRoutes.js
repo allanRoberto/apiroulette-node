@@ -8,7 +8,99 @@ router.get('/', (req, res) => {
 })
 // Rota de autenticação para login de usuários
 router.post('/auth/login', async (req, res) => {
-    res.status(200).json({message: "ok post"})
+
+    try {
+        // Extrai email e senha do corpo da requisição
+        const { email, password } = req.body;
+
+        // Configuração da requisição para a API da LotoGreen
+        const config = {
+            method: 'post',
+            url: 'https://lotogreen.bet.br/api/auth/login',
+            headers: { 
+                'accept': 'application/json', 
+                'accept-language': 'pt,pt-PT;q=0.9,en-US;q=0.8,en;q=0.7', 
+                'authorization': 'Bearer null', 
+                'cache-control': 'private, max-age=600', 
+                'content-type': 'application/json', 
+                'origin': 'https://lotogreen.bet.br', 
+                'priority': 'u=1, i', 
+                'referer': 'https://lotogreen.bet.br/', 
+                'sec-ch-ua': '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"', 
+                'sec-ch-ua-mobile': '?0', 
+                'sec-ch-ua-platform': '"macOS"', 
+                'sec-fetch-dest': 'empty', 
+                'sec-fetch-mode': 'cors', 
+                'sec-fetch-site': 'same-origin', 
+                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+            },
+            data: {
+                email: email,
+                password: password,
+                login: email
+            }
+        };
+
+        // Envio da requisição de login para a API externa
+        const response = await axios(config);
+        
+
+        // Configuração para verificar o status do Legitimuz (verificação de identidade)
+        const legitimuzConfig = {
+            method: 'get',
+            url: 'https://lotogreen.bet.br/api/legitimuzStatus',
+            headers: { 
+                'accept': '*/*',
+                'authorization': `Bearer ${response.data.access_token}`,
+                'content-type': 'application/json',
+                'origin': 'https://lotogreen.bet.br',
+                'referer': 'https://lotogreen.bet.br/'
+            }
+        };
+
+        try {
+            // Consulta o status do Legitimuz com o token obtido no login
+            const legitimuzResponse = await axios(legitimuzConfig);
+            
+            // Retorna os dados de login junto com o status do Legitimuz
+            res.cookie(
+                'bookmaker_token',
+                response.data.access_token,
+                {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'lax',
+                    maxAge: 1000 * 60 * 60 * 24 * 30 // 30 dias
+                }
+            ).json({
+                isConnected: true,
+                legitimuzStatus: legitimuzResponse.data
+            });
+        } catch (legitimuzError) {
+            console.error('Erro ao verificar status do Legitimuz:', legitimuzError.message);
+            
+            // Retorna apenas os dados do login se houver erro no Legitimuz
+            res.json({
+                ...response.data,
+                legitimuzStatus: null
+            });
+        }
+    } catch (error) {
+        console.log(error)
+        console.error('Erro na autenticação:', error.response?.data || error.message);
+        
+        // Tratamento específico de erros da API
+        if (error.response?.data) {
+            return res.status(error.response.status).json({
+                error: error.response.data.message || error.response.data
+            });
+        }
+        
+        // Retorna erro genérico caso não seja possível determinar a causa específica
+        res.status(500).json({
+            error: 'Erro ao realizar login. Por favor, tente novamente.'
+        });
+    }
 });
 
 // Endpoint para buscar dados do usuário autenticado
