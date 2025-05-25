@@ -1,13 +1,13 @@
 // src/index.js
 import 'dotenv/config';           // carrega e executa o .config() automaticamente
 import express from 'express';
-import { createServer } from 'http';
+//import { createServer } from 'http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes/apiRoutes.js';
-import { setupWebsocket } from './websocket.js';
+//import { setupWebsocket } from './websocket.js';
 
-import redisClient from './lib/redisClient.js';
+//import redisClient from './lib/redisClient.js';
 
 const app = express();
 
@@ -21,14 +21,14 @@ app.use(cookieParser());
 app.use('/api', apiRoutes);
 
 // 🔗 HTTP + WS num mesmo server
-const server = createServer(app);
+//const server = createServer(app);
 
 
 // ⚙️ Configura WebSocket
-setupWebsocket(server, redisClient);
+//setupWebsocket(server, redisClient);
 
 // 📡 Start
 const PORT = process.env.PORT || 3090;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server HTTP e WS rodando na porta ${PORT}`);
 });
