@@ -44,7 +44,7 @@ try {
 
 // Inicialização da aplicação Express
 const app = express();
-const port =  8080;
+const port =  3090;
 
 // Configuração de CORS para permitir requisições de diferentes origens
 app.use(cors({
@@ -77,7 +77,6 @@ app.post('/api/auth/login', async (req, res) => {
             headers: { 
                 'accept': 'application/json', 
                 'accept-language': 'pt,pt-PT;q=0.9,en-US;q=0.8,en;q=0.7', 
-                'authorization': 'Bearer null', 
                 'cache-control': 'private, max-age=600', 
                 'content-type': 'application/json', 
                 'origin': 'https://lotogreen.bet.br', 
