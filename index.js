@@ -44,7 +44,7 @@ try {
 
 // Inicialização da aplicação Express
 const app = express();
-const port =  3090;
+const port =  8080;
 
 // Configuração de CORS para permitir requisições de diferentes origens
 app.use(cors({
