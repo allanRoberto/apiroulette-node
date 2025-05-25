@@ -57,7 +57,7 @@ app.use(session({
     secret: 'd0ltdqp5pdvs738mjqng',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Para desenvolvimento (use true em produção com HTTPS)
+    cookie: { secure: true } // Para desenvolvimento (use true em produção com HTTPS)
 }));
 
 // Configuração do bodyParser para processar requisições com corpo JSON
