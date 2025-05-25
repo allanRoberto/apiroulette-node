@@ -3,7 +3,7 @@ import axios from 'axios';
 const router = Router();
 
 
-router.get('/', () => {
+router.get('/', (req, res) => {
     res.status(200).json({message : "ok"})
 })
 // Rota de autenticação para login de usuários

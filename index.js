@@ -12,7 +12,7 @@ import apiRoutes from './routes/apiRoutes.js';
 const app = express();
 
 // 🔧 Middlewares
-app.use(cors({ origin: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
